@@ -1,39 +1,43 @@
-const int ledCount = 8;
-int count=0; 
-int ledPins[] = { 
-23,22,21,12,19,18,17,16}; 
-
-bool test = true;
-
+const int buttonpin = 27;
+int ledpins[] = {23,22,21,12,19,18,17,16};
+int pincount = 8;
+int buttonstate = 0;
+int lightpin = 0;
+int flag = 0;
 void setup() {
-  // put your setup code here, to run once:
-pinMode(27, INPUT);
-  for (int thisLed = 0; thisLed < ledCount; thisLed++) {
-    pinMode(ledPins[thisLed], OUTPUT); 
+  pinMode(27,INPUT);
+
+  for(int thispin = 0;thispin < pincount;thispin++){
+      pinMode(ledpins[thispin],OUTPUT);
   }
-  Serial.begin(115200);
+  for(int thispin = 0;thispin < pincount;thispin++){
+       digitalWrite(ledpins[thispin],LOW);
+      delay(200);
+  }
 }
 
 void loop() {
-  int buttonstate = digitalRead(27);
-  if(buttonstate==HIGH){
- 
-    if(count<8){
-      digitalWrite(ledPins[count],HIGH);
-      count++;
-      Serial.println("HIGHHHHHHHHH");
-    }
+  buttonstate =digitalRead(buttonpin);
 
-    if(count>=8 && count<16){
-      digitalWrite(ledPins[count-8],LOW);
-      count++;
-     Serial.println("...");
+  if(buttonstate == HIGH&&flag == 0)
+  {
+    digitalWrite(ledpins[lightpin],HIGH);
+    lightpin++;
+    delay(200);
+    if(lightpin == 8)
+    {
+      flag = 1;
     }
-
-    if(count == 16)count = 0;
-    
- }
-    
-  
+  }
+  if(buttonstate == HIGH&&flag == 1)
+  {
+    digitalWrite(ledpins[lightpin],LOW);
+    lightpin--;
+    delay(200);
+    if(lightpin == (-1))
+    {
+      flag = 0;
+      lightpin = 0;
+    }
+  }
 }
-
